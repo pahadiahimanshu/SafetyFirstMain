@@ -15,14 +15,23 @@ import com.safety.hss.safetyfirst.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Log tag
     public static final String aa = "LOGGING";
+
+    // service actions
+    private static final String ACTION_COLLECT = "com.safety.hss.safetyfirst.service.action.COLLECT";
+    private static final String ACTION_STOP = "com.safety.hss.safetyfirst.service.action.STOP";
+
+    // color hex codes
     final String color_bgGrey = "#bcbbbb";
     final String color_primary = "#3fb57c";
 
+    // declare app ui components
     ImageView img_btn_start;
     LinearLayout middle_section;
     TextView lbl_text_middleMsg;
 
+    // declare helper vairables
     boolean middle_section_color = false;
 
     @Override
