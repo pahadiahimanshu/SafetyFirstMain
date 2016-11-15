@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Safety First</string>
-    <string name="info">Safety first application lets you manage your notifications and keeps the distraction away while you drive.</string>
+    <string name="info">Manage your notifications and keep the distractions away while you drive.</string>
     <string name="text_starToggle">Start</string>
 </resources>
