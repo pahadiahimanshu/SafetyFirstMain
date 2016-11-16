@@ -4,9 +4,16 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
-public class SensorDataCollection extends IntentService {
+import java.util.ArrayList;
+
+import static java.lang.System.in;
+
+public class SensorDataCollection extends IntentService implements SensorEventListener {
 
     // Log tag
     public static final String aa = "LOGGING";
@@ -21,6 +28,12 @@ public class SensorDataCollection extends IntentService {
     // Sensor variables
     public Sensor acc;
     public SensorManager sm;
+
+    // Sensor data is collected here
+    public static ArrayList<Float[]> data = new ArrayList<Float[]>();
+
+    public static int currentAccuracy;
+    public static boolean started = false, finished = false, successful = true;
 
 
     public SensorDataCollection() {
@@ -46,6 +59,14 @@ public class SensorDataCollection extends IntentService {
             if (ACTION_COLLECT.equals(action)) {
                 // final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 handleActionCollect();
+
+                while (!successful){
+                    try {
+                        Thread.sleep(4000);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
             } else if (ACTION_STOP.equals(action)) {
                 handleStop();
             }
@@ -53,12 +74,43 @@ public class SensorDataCollection extends IntentService {
     }
 
     private void handleActionCollect() {
-        startCollecting(this);
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.d(aa,"Collecting data");
+        sm=(SensorManager)getSystemService(SENSOR_SERVICE);
+        acc=sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        sm.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL);
+
+
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        handleStop();
+        return super.stopService(name);
+
     }
 
     private void handleStop() {
-        stopCollecting(this);
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.d(aa, "Stop collection");
+        for(Float[] b: data)
+        {
+            Log.d(aa, "(x,y,z,accuracy = "+ b);
+        }
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(started) {
+            Float[] temp = {sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2], currentAccuracy * 1.0f};
+            data.add(temp);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        if(started) {
+            currentAccuracy = i;
+        }
     }
 }
