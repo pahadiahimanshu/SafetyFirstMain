@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.safety.hss.safetyfirst.R;
 import com.safety.hss.safetyfirst.service.SensorDataCollection;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     // Log tag
     public static final String aa = "LOGGING";
@@ -46,37 +46,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         lbl_text_middleMsg = (TextView) findViewById(R.id.lbl_text_middleMsg);
 
-        img_btn_start = (ImageView)findViewById(R.id.img_btn_start);
-        middle_section = (LinearLayout)findViewById(R.id.middle_section);
+        img_btn_start = (ImageView) findViewById(R.id.img_btn_start);
+        middle_section = (LinearLayout) findViewById(R.id.middle_section);
 
         img_btn_start.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SensorDataCollection.class);
                 intent.setAction(ACTION_COLLECT);
-                if(middle_section_color)
-                {
+                if (middle_section_color) {
                     middle_section.setBackgroundColor(Color.parseColor(color_bgGrey));
                     middle_section_color = false;
                     lbl_text_middleMsg.setText("Service stoppped");
                     SensorDataCollection.started = false;
                     SensorDataCollection.finished = true;
                     Log.d(aa, "Stop collection");
-                    for(Float[] b: SensorDataCollection.data)
-                    {
-                        Log.d(aa, "(x,y,z,accuracy) = (" + b[0]+", "+b[1]+", "+b[2]+", "+b[3]+")");
+                    for (Float[] b : SensorDataCollection.data) {
+                        Log.d(aa, "(x,y,z,accuracy) = (" + b[0] + ", " + b[1] + ", " + b[2] + ", " + b[3] + ")");
                     }
                     stopService(intent);
                     Log.d(aa, "Stopped");
-                    if(!SensorDataCollection.finished)
-                    {
+                    if (!SensorDataCollection.finished) {
 
                     }
-                }
-                else
-                {
+                } else {
 
                     middle_section.setBackgroundColor(Color.parseColor(color_primary));
                     middle_section_color = true;
@@ -118,15 +112,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if(SensorDataCollection.started) {
-            Log.d(aa,sensorEvent.values[0]+", "+sensorEvent.values[1]+", "+sensorEvent.values[2]);
+        if (SensorDataCollection.started) {
+            Log.d(aa, sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-        if(SensorDataCollection.started) {
-            Log.d(aa,"sensor accuracy changed ");
+        if (SensorDataCollection.started) {
+            Log.d(aa, "sensor accuracy changed ");
         }
     }
 }
